@@ -58,11 +58,6 @@ class AssociatedContentManager
   void GetScreenshots(ConversationHandler::GetScreenshotsCallback callback);
   void GetStagedEntriesFromContent(
       ConversationHandler::GetStagedEntriesCallback callback);
-  void GetTopSimilarityWithPromptTilContextLimit(
-      const std::string& prompt,
-      const std::string& text,
-      uint32_t context_limit,
-      TextEmbedder::TopSimilarityCallback callback);
 
   std::vector<mojom::AssociatedContentPtr> GetAssociatedContent() const;
 
