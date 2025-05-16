@@ -173,7 +173,7 @@ ConversationHandler* AIChatService::CreateConversation() {
   {
     mojom::ConversationPtr conversation = mojom::Conversation::New(
         conversation_uuid, "", base::Time::Now(), false, std::nullopt, 0, 0,
-        std::vector<mojom::AssociatedContentPtr>());
+        false, std::vector<mojom::AssociatedContentPtr>());
     conversations_.insert_or_assign(conversation_uuid, std::move(conversation));
   }
   mojom::Conversation* conversation =
@@ -610,7 +610,12 @@ void AIChatService::DeleteConversation(const std::string& id) {
       ai_chat_metrics_->RecordConversationUnload(id);
     }
   }
-  conversations_.erase(id);
+  bool temporary = false;
+  auto conversation_it = conversations_.find(id);
+  if (conversation_it != conversations_.end()) {
+    temporary = (*conversation_it).second->temporary;
+    conversations_.erase(conversation_it);
+  }
   DVLOG(1) << "Erased conversation due to deletion request (" << id
            << "). Now have " << conversations_.size()
            << " Conversation metadata items and "
@@ -618,7 +623,7 @@ void AIChatService::DeleteConversation(const std::string& id) {
            << " ConversationHandler instances.";
   OnConversationListChanged();
   // Update database
-  if (ai_chat_db_) {
+  if (ai_chat_db_ && !temporary) {
     ai_chat_db_
         .AsyncCall(base::IgnoreResult(&AIChatDatabase::DeleteConversation))
         .WithArgs(id);
@@ -790,7 +795,7 @@ void AIChatService::HandleFirstEntry(
 
   // We can persist the conversation metadata for the first time as well as the
   // entry.
-  if (ai_chat_db_) {
+  if (ai_chat_db_ && !conversation->temporary) {
     ai_chat_db_.AsyncCall(base::IgnoreResult(&AIChatDatabase::AddConversation))
         .WithArgs(conversation->Clone(), std::move(associated_content),
                   entry->Clone());
@@ -814,7 +819,7 @@ void AIChatService::HandleNewEntry(
            << handler->GetConversationHistory().size();
 
   // Persist the new entry and update the associated content data, if present
-  if (ai_chat_db_) {
+  if (ai_chat_db_ && !conversation->temporary) {
     ai_chat_db_
         .AsyncCall(base::IgnoreResult(&AIChatDatabase::AddConversationEntry))
         .WithArgs(handler->get_conversation_uuid(), entry.Clone(),
@@ -841,7 +846,7 @@ void AIChatService::HandleNewEntry(
 void AIChatService::OnConversationEntryRemoved(ConversationHandler* handler,
                                                std::string entry_uuid) {
   // Persist the removal
-  if (ai_chat_db_) {
+  if (ai_chat_db_ && !handler->GetIsTemporary()) {
     ai_chat_db_
         .AsyncCall(base::IgnoreResult(&AIChatDatabase::DeleteConversationEntry))
         .WithArgs(entry_uuid);
@@ -873,7 +878,7 @@ void AIChatService::OnConversationTitleChanged(
   OnConversationListChanged();
 
   // Persist the change
-  if (ai_chat_db_) {
+  if (ai_chat_db_ && !conversation_metadata->temporary) {
     ai_chat_db_
         .AsyncCall(base::IgnoreResult(&AIChatDatabase::UpdateConversationTitle))
         .WithArgs(conversation_uuid, new_title);
@@ -897,7 +902,7 @@ void AIChatService::OnConversationTokenInfoChanged(
   OnConversationListChanged();
 
   // Persist the change
-  if (ai_chat_db_) {
+  if (ai_chat_db_ && !conversation_metadata->temporary) {
     ai_chat_db_
         .AsyncCall(
             base::IgnoreResult(&AIChatDatabase::UpdateConversationTokenInfo))

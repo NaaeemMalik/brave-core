@@ -568,6 +568,7 @@ bool AIChatDatabase::AddConversation(mojom::ConversationPtr conversation,
                                      std::vector<std::string> contents,
                                      mojom::ConversationTurnPtr first_entry) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  CHECK(!conversation->temporary);
   CHECK(!conversation->uuid.empty());
   CHECK(first_entry);
   if (!LazyInit()) {

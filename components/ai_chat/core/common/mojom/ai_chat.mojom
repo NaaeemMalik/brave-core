@@ -107,6 +107,9 @@ struct Conversation {
   // This info is determined by the server side and applies to the whole conversation.
   // Things that can be trimmed include associated content(s) and server side things like search results.
   uint64 trimmed_tokens;
+  // Indicates whether the conversation is temporary which would be in-memory
+  // only and not persisted in database.
+  bool temporary = false;
 
   array<AssociatedContent> associated_content;
 };
@@ -464,6 +467,9 @@ struct ConversationState {
   array<AssociatedContent> associated_content;
   bool should_send_content;
   APIError error;
+  // Indicates whether the conversation is temporary which would be in-memory
+  // only and not persisted in database.
+  bool temporary = false;
   // TODO(petemill): include conversation history, once
   // `OnConversationHistoryUpdate` is more intelligent (see TOOD in definition).
 };
@@ -551,6 +557,10 @@ interface ConversationHandler {
       string rating_id, bool send_hostname) => (bool is_success);
 
   GetScreenshots() => (array<UploadedFile>? screenshots);
+
+  // Make it a temporary conversation, only available at the start of the
+  // conversation. It would be a no-op if the conversation is not empty.
+  SetTemporary(bool temporary);
 };
 
 // Browser-side handler for a Conversation's UI responsible for displaying
