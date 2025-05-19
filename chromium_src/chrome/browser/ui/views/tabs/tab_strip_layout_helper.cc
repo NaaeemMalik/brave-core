@@ -10,9 +10,10 @@
 #define CalculateTabBounds                                                     \
   FillTiledState(tab_widths, static_cast<BraveTabStrip*>(tab_strip_.get())) && \
           use_vertical_tabs_&& FillGroupInfo(tab_widths)                       \
-      ? tabs::CalculateVerticalTabBounds(                                      \
-            tab_widths, available_width,                                       \
-            GetBraveTabStrip() -> IsVerticalTabsFloating())                    \
+      ? std::make_pair(tabs::CalculateVerticalTabBounds(                       \
+                           tab_widths, available_width,                        \
+                           GetBraveTabStrip() -> IsVerticalTabsFloating()),    \
+                       LayoutDomain::kInactiveWidthEqualsActiveWidth)          \
       : CalculateTabBounds
 
 #include "src/chrome/browser/ui/views/tabs/tab_strip_layout_helper.cc"
