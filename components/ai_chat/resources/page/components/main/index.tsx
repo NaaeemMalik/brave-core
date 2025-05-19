@@ -21,6 +21,7 @@ import ErrorInvalidEndpointURL from '../alerts/error_invalid_endpoint_url'
 import ErrorRateLimit from '../alerts/error_rate_limit'
 import ErrorServiceOverloaded from '../alerts/error_service_overloaded'
 import LongConversationInfo from '../alerts/long_conversation_info'
+import TemporaryChatInfo from '../alerts/temporary_chat_info'
 import NoticeConversationStorage from '../notices/notice_conversation_storage'
 import WarningPremiumDisconnected from '../alerts/warning_premium_disconnected'
 import ConversationsList from '../conversations_list'
@@ -93,6 +94,8 @@ function Main() {
   const showAttachments = useSupportsAttachments()
     && conversationContext.showAttachments
     && aiChatContext.tabs.length > 0
+
+  const showTemporaryChatInfo = conversationContext.isTemporaryChat
 
   let currentErrorElement = null
 
@@ -232,6 +235,12 @@ function Main() {
             {aiChatContext.hasAcceptedAgreement && (
               <>
                 <ModelIntro />
+
+                {showTemporaryChatInfo && (
+                  <div className={styles.promptContainer}>
+                    <TemporaryChatInfo />
+                  </div>
+                )}
 
                 {conversationContext.associatedContentInfo && conversationContext.shouldSendPageContents && (
                   <div className={styles.siteTitleContainer}>

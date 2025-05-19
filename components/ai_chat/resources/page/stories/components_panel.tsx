@@ -90,6 +90,7 @@ const CONVERSATIONS: Mojom.Conversation[] = [
     modelKey: undefined,
     totalTokens: BigInt(0),
     trimmedTokens: BigInt(0),
+    temporary: false
   },
   {
     title: 'Sorting C++ vectors is hard especially when you have to have a very long title for your conversation to test text clipping or wrapping',
@@ -100,6 +101,7 @@ const CONVERSATIONS: Mojom.Conversation[] = [
     modelKey: undefined,
     totalTokens: BigInt(0),
     trimmedTokens: BigInt(0),
+    temporary: false
   },
   {
     title: '',
@@ -110,6 +112,7 @@ const CONVERSATIONS: Mojom.Conversation[] = [
     modelKey: undefined,
     totalTokens: BigInt(0),
     trimmedTokens: BigInt(0),
+    temporary: false
   }
 ]
 
@@ -590,6 +593,7 @@ type CustomArgs = {
   isNewConversation: boolean
   generatedUrlToBeOpened: Url | undefined
   ratingTurnUuid: { isLiked: boolean; turnUuid: string } | undefined
+  isTemporaryChat: boolean
 }
 
 const args: CustomArgs = {
@@ -625,7 +629,8 @@ const args: CustomArgs = {
   showAttachments: true,
   isNewConversation: false,
   generatedUrlToBeOpened: undefined,
-  ratingTurnUuid: undefined
+  ratingTurnUuid: undefined,
+  isTemporaryChat: false
 }
 
 const meta: Meta<CustomArgs> = {
@@ -804,6 +809,7 @@ function StoryContext(props: React.PropsWithChildren<{ args: CustomArgs, setArgs
     generatedUrlToBeOpened: options.args.generatedUrlToBeOpened,
     ratingTurnUuid: options.args.ratingTurnUuid,
     isUploadingFiles: false,
+    isTemporaryChat: options.args.isTemporaryChat,
     setInputText,
     setCurrentModel: () => { },
     switchToBasicModel,
@@ -829,7 +835,10 @@ function StoryContext(props: React.PropsWithChildren<{ args: CustomArgs, setArgs
     setIgnoreExternalLinkWarning: () => { },
     handleCloseRateMessagePrivacyModal:
       () => setArgs({ ratingTurnUuid: undefined }),
-    handleRateMessage: () => Promise.resolve()
+    handleRateMessage: () => Promise.resolve(),
+    setTemporary: (temporary: boolean) => {
+      setArgs({ isTemporaryChat: temporary })
+    }
   }
 
   const conversationEntriesContext: UntrustedConversationContext = {

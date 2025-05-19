@@ -70,6 +70,7 @@ export type ConversationContext = SendFeedbackState & CharCountContext & {
   handleVoiceRecognition?: () => void
   conversationHandler?: Mojom.ConversationHandlerRemote
 
+  isTemporaryChat: boolean
   showAttachments: boolean
   setShowAttachments: (show: boolean) => void
   uploadImage: (useMediaCapture: boolean) => void
@@ -79,6 +80,7 @@ export type ConversationContext = SendFeedbackState & CharCountContext & {
   setIgnoreExternalLinkWarning: () => void
   pendingMessageImages: Mojom.UploadedFile[]
   isUploadingFiles: boolean
+  setTemporary: (temporary: boolean) => void
 }
 
 export const defaultCharCountContext: CharCountContext = {
@@ -120,6 +122,7 @@ const defaultContext: ConversationContext = {
   resetSelectedActionType: () => { },
   handleActionTypeClick: () => { },
   setIsToolsMenuOpen: () => { },
+  isTemporaryChat: false,
   showAttachments: false,
   setShowAttachments: () => { },
   uploadImage: (useMediaCapture: boolean) => { },
@@ -129,6 +132,7 @@ const defaultContext: ConversationContext = {
   setIgnoreExternalLinkWarning: () => { },
   pendingMessageImages: [],
   isUploadingFiles: false,
+  setTemporary: (temporary: boolean) => { },
   ...defaultSendFeedbackState,
   ...defaultCharCountContext
 }
@@ -254,7 +258,8 @@ export function ConversationContextProvider(props: React.PropsWithChildren) {
         suggestionStatus,
         associatedContent,
         shouldSendContent,
-        error
+        error,
+        temporary
       } } = await conversationHandler.getState()
       setPartialContext({
         conversationUuid,
@@ -264,7 +269,8 @@ export function ConversationContextProvider(props: React.PropsWithChildren) {
         suggestionStatus,
         associatedContentInfo: associatedContent,
         shouldSendPageContents: shouldSendContent,
-        currentError: error
+        currentError: error,
+        isTemporaryChat: temporary
       })
     }
 
@@ -693,6 +699,15 @@ export function ConversationContextProvider(props: React.PropsWithChildren) {
     uploadImage,
     getScreenshots,
     removeImage,
+    setTemporary: (temporary) => {
+      // Only allow setting temporary status for empty conversations
+      if (context.conversationHistory.length === 0) {
+        // Update local state first for immediate UI feedback
+        setPartialContext({ isTemporaryChat: temporary })
+        // Then update backend state
+        conversationHandler.setTemporary(temporary)
+      }
+    },
     conversationHandler,
     setGeneratedUrlToBeOpened:
       (url?: Url) => setPartialContext({ generatedUrlToBeOpened: url }),

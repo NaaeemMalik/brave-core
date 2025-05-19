@@ -8,6 +8,7 @@ import ButtonMenu from '@brave/leo/react/buttonMenu'
 import Button from '@brave/leo/react/button'
 import Icon from '@brave/leo/react/icon'
 import Label from '@brave/leo/react/label'
+import Toggle from '@brave/leo/react/toggle'
 import classnames from '$web-common/classnames'
 import { getLocale } from '$web-common/locale'
 import * as Mojom from '../../../common/mojom'
@@ -37,6 +38,10 @@ export default function FeatureMenu(props: Props) {
   const leoModels = conversationContext.allModels.filter(
     (model) => model.options.leoModelOptions
   )
+
+  const handleTemporaryChatToggle = (detail: { checked: boolean }) => {
+    conversationContext.setTemporary(detail.checked)
+  }
 
   return (
     <ButtonMenu className={styles.buttonMenu}>
@@ -111,6 +116,27 @@ export default function FeatureMenu(props: Props) {
         )
       })}
       <div className={styles.menuSeparator} />
+
+      {!isActiveConversationPermanent && (
+        <leo-menu-item>
+          <div className={classnames(
+            styles.menuItemWithIcon,
+            styles.menuItemMainItem
+          )}>
+            <Icon name='message-bubble-temporary' />
+            <span className={styles.menuText}>
+              {getLocale('temporaryChatLabel')}
+            </span>
+            <Toggle
+              size='small'
+              onChange={handleTemporaryChatToggle}
+              checked={conversationContext.isTemporaryChat}
+            >
+              <span slot="on-icon" />
+            </Toggle>
+          </div>
+        </leo-menu-item>
+      )}
 
       {aiChatContext.isStandalone && isActiveConversationPermanent && <>
         <leo-menu-item onClick={() => aiChatContext.setEditingConversationId(conversationContext.conversationUuid!)}>
