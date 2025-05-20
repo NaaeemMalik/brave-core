@@ -17,6 +17,7 @@
 #include "brave/components/ai_chat/core/browser/ai_chat_service.h"
 #include "brave/components/ai_chat/core/browser/constants.h"
 #include "brave/components/ai_chat/core/browser/conversation_handler.h"
+#include "brave/components/ai_chat/core/browser/localized_strings.h"
 #include "brave/components/ai_chat/core/common/mojom/ai_chat.mojom.h"
 #include "brave/components/ai_chat/core/common/mojom/untrusted_frame.mojom.h"
 #include "brave/components/ai_chat/resources/grit/ai_chat_ui_generated_map.h"

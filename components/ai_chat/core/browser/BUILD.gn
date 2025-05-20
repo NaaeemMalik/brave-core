@@ -3,6 +3,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at https://mozilla.org/MPL/2.0/.
 
+import("//brave/components/common/generate_string_resources.gni")
 import("//brave/components/text_recognition/common/buildflags/buildflags.gni")
 import("//tools/json_schema_compiler/json_schema_api.gni")
 
@@ -64,6 +65,8 @@ static_library("browser") {
   ]
 
   deps = [
+    ":ai_chat_ui_strings",
+    ":ai_chat_ui_strings__localized_strings",
     ":generated_brave_search_responses",
     "//brave/brave_domains",
     "//brave/components/ai_chat/core/common",
@@ -106,6 +109,22 @@ static_library("browser") {
   if (enable_text_recognition) {
     deps += [ "//brave/components/text_recognition/browser" ]
   }
+}
+
+generate_string_resources("ai_chat_ui_strings") {
+
+  input_grdp = "//brave/components/resources/ai_chat_ui_strings.grdp"
+  cpp_namespace = "ai_chat"
+
+  string_include_path = "components/grit/brave_components_strings.h"
+
+  strip_string_prefixes = [
+    "CHAT_UI",
+    "AI_CHAT"
+  ]
+
+  generate_js = true
+  generate_localized_strings = true
 }
 
 source_set("text_embedder") {

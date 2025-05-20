@@ -19,6 +19,7 @@
 #include "brave/browser/ui/webui/brave_webui_source.h"
 #include "brave/components/ai_chat/core/browser/ai_chat_service.h"
 #include "brave/components/ai_chat/core/browser/constants.h"
+#include "brave/components/ai_chat/core/browser/localized_strings.h"
 #include "brave/components/ai_chat/core/browser/engine/engine_consumer.h"
 #include "brave/components/ai_chat/core/browser/utils.h"
 #include "brave/components/ai_chat/core/common/mojom/ai_chat.mojom.h"

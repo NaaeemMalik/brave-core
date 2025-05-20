@@ -19,6 +19,7 @@
 #include "brave/components/ai_chat/core/browser/tab_tracker_service.h"
 #include "brave/components/ai_chat/core/browser/utils.h"
 #include "brave/components/ai_chat/core/common/constants.h"
+#include "brave/components/ai_chat/core/browser/localized_strings.h"
 #include "brave/components/ai_chat/core/common/features.h"
 #include "brave/components/ai_chat/core/common/mojom/ai_chat.mojom.h"
 #include "brave/components/ai_chat/core/common/pref_names.h"
