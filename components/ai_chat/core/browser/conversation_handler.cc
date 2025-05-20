@@ -79,17 +79,12 @@ constexpr size_t kDefaultSuggestionsCount = 4;
 
 }  // namespace
 
-AssociatedContentDelegate::AssociatedContentDelegate()
-    : text_embedder_(nullptr, base::OnTaskRunnerDeleter(nullptr)) {}
+AssociatedContentDelegate::AssociatedContentDelegate() {}
 
 AssociatedContentDelegate::~AssociatedContentDelegate() = default;
 
 void AssociatedContentDelegate::OnNewPage(int64_t navigation_id) {
-  pending_top_similarity_requests_.clear();
-  if (text_embedder_) {
-    text_embedder_->CancelAllTasks();
-    text_embedder_.reset();
-  }
+  
 }
 
 void AssociatedContentDelegate::GetStagedEntriesFromContent(
@@ -104,70 +99,6 @@ bool AssociatedContentDelegate::HasOpenAIChatPermission() const {
 void AssociatedContentDelegate::GetScreenshots(
     mojom::ConversationHandler::GetScreenshotsCallback callback) {
   std::move(callback).Run(std::nullopt);
-}
-
-void AssociatedContentDelegate::GetTopSimilarityWithPromptTilContextLimit(
-    const std::string& prompt,
-    const std::string& text,
-    uint32_t context_limit,
-    TextEmbedder::TopSimilarityCallback callback) {
-  // Create TextEmbedder
-  if (!text_embedder_) {
-    base::FilePath universal_qa_model_path =
-        LocalModelsUpdaterState::GetInstance()->GetUniversalQAModel();
-    // Tasks in TextEmbedder are run on |embedder_task_runner|. The
-    // text_embedder_ must be deleted on that sequence to guarantee that pending
-    // tasks can safely be executed.
-    scoped_refptr<base::SequencedTaskRunner> embedder_task_runner =
-        base::ThreadPool::CreateSequencedTaskRunner(
-            {base::MayBlock(), base::TaskPriority::USER_BLOCKING});
-    text_embedder_ = TextEmbedder::Create(
-        base::FilePath(universal_qa_model_path), embedder_task_runner);
-    if (!text_embedder_) {
-      std::move(callback).Run(
-          base::unexpected("Failed to create TextEmbedder"));
-      pending_top_similarity_requests_.pop_back();
-      return;
-    }
-  }
-
-  if (!text_embedder_->IsInitialized()) {
-    // Will have to wait for initialization to complete, store params for
-    // calling later.
-    pending_top_similarity_requests_.emplace_back(prompt, text, context_limit,
-                                                  std::move(callback));
-
-    text_embedder_->Initialize(
-        base::BindOnce(&ConversationHandler::AssociatedContentDelegate::
-                           OnTextEmbedderInitialized,
-                       weak_ptr_factory_.GetWeakPtr()));
-  } else {
-    // Run immediately if already initialized
-    text_embedder_->GetTopSimilarityWithPromptTilContextLimit(
-        prompt, text, context_limit, std::move(callback));
-  }
-}
-
-void AssociatedContentDelegate::OnTextEmbedderInitialized(bool initialized) {
-  if (!initialized) {
-    VLOG(1) << "Failed to initialize TextEmbedder";
-    for (auto& request_info : pending_top_similarity_requests_) {
-      std::move(std::get<3>(request_info))
-          .Run(base::unexpected<std::string>(
-              "Failed to initialize TextEmbedder"));
-    }
-    pending_top_similarity_requests_.clear();
-    return;
-  }
-
-  CHECK(text_embedder_);
-  for (auto& request_info : pending_top_similarity_requests_) {
-    text_embedder_->GetTopSimilarityWithPromptTilContextLimit(
-        std::move(std::get<0>(request_info)),
-        std::move(std::get<1>(request_info)), std::get<2>(request_info),
-        std::move(std::get<3>(request_info)));
-  }
-  pending_top_similarity_requests_.clear();
 }
 
 ConversationHandler::Suggestion::Suggestion(std::string title)
@@ -1232,15 +1163,6 @@ void ConversationHandler::PerformAssistantGeneration(
       last_entry->action_type != mojom::ActionType::SUMMARIZE_PAGE &&
       associated_content_delegate_) {
     DVLOG(2) << "Refining content of length: " << page_content.length();
-
-    auto refined_content_callback = base::BindOnce(
-        &ConversationHandler::OnGetRefinedPageContent,
-        weak_ptr_factory_.GetWeakPtr(), std::move(data_received_callback),
-        std::move(data_completed_callback), page_content, is_video);
-
-    associated_content_delegate_->GetTopSimilarityWithPromptTilContextLimit(
-        last_entry->prompt.value_or(last_entry->text), page_content,
-        max_content_length, std::move(refined_content_callback));
 
     UpdateOrCreateLastAssistantEntry(EngineConsumer::GenerationResultData(
         mojom::ConversationEntryEvent::NewPageContentRefineEvent(
