@@ -192,7 +192,6 @@ TEST(FeatureDefaultsTest, DisabledFeatures) {
       &lens::features::kLensStandalone,
       &manta::features::kMantaService,
       &media::kLiveCaption,
-      &metrics::structured::kEnabledStructuredMetricsService,
       &metrics::structured::kPhoneHubStructuredMetrics,
       &net::features::kEnableWebTransportDraft07,
       &net::features::kTopLevelTpcdOriginTrial,
