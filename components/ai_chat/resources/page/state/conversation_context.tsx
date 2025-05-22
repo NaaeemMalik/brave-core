@@ -4,7 +4,7 @@
 // You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import * as React from 'react'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import { Url } from 'gen/url/mojom/url.mojom.m.js'
 import * as Mojom from '../../common/mojom'
 import useIsConversationVisible from '../hooks/useIsConversationVisible'
@@ -355,7 +355,7 @@ export function ConversationContextProvider(props: React.PropsWithChildren) {
       if (isPWA) {
         document.title = conversationTitle
       } else {
-        document.title = `${getLocale('siteTitle')} - ${conversationTitle}`
+        document.title = `${getLocale('title')} - ${conversationTitle}`
       }
     }
 

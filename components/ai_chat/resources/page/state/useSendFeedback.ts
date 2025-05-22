@@ -6,7 +6,7 @@
 import * as React from 'react'
 import { showAlert } from '@brave/leo/react/alertCenter'
 import * as Mojom from '../../common/mojom'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 
 /**
  * State needed for UI to embed a feedback form
@@ -138,7 +138,7 @@ export default function useSendFeedback(
       if (!response.isSuccess) {
         showAlert({
           type: 'error',
-          content: getLocale('feedbackError'),
+          content: getLocale('feedbackSubmitError'),
           actions: []
         })
         return

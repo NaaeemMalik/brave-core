@@ -13,7 +13,7 @@ import { AIChatContext } from '../../state/ai_chat_context'
 import { getImageFiles } from '../../../common/conversation_history_utils'
 
 // Utils
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 
 // Styles
 import styles from './style.module.scss'
@@ -38,7 +38,7 @@ export default function AttachmentButtonMenu(props: Props) {
           <Button
             fab
             kind='plain-faint'
-            title={getLocale('attachmentMenuButtonLabel')}
+            title={getLocale('leoAttachmentMenuButtonLabel')}
             isDisabled={isMenuDisabled}
           >
             <Icon name='attachment' />

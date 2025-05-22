@@ -6,7 +6,7 @@
 import * as React from 'react'
 import Button from '@brave/leo/react/button'
 import Icon from '@brave/leo/react/icon'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import classnames from '$web-common/classnames'
 import { useUntrustedConversationContext } from '../../untrusted_conversation_context'
 import CopyButton from '../copy_button'

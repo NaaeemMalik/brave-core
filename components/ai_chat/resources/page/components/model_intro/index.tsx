@@ -8,24 +8,25 @@ import Icon from '@brave/leo/react/icon'
 import Tooltip from '@brave/leo/react/tooltip'
 import Button from '@brave/leo/react/button'
 import formatMessage from '$web-common/formatMessage'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import * as Mojom from '../../../common/mojom'
 import { useAIChat } from '../../state/ai_chat_context'
 import { useConversation } from '../../state/conversation_context'
 import styles from './style.module.scss'
 import { getKeysForMojomEnum } from '$web-common/mojomUtils'
+import { camelCase } from '$web-common/camelCase'
 
 function getCategoryName(category: Mojom.ModelCategory) {
   // To avoid problems when order of enum values change, we base the key
   // on the enum name rather than the number value, e.g. "CHAT" vs 0
   const categoryKey = getKeysForMojomEnum(Mojom.ModelCategory)[category]
-  const key = `modelCategory-${categoryKey.toLowerCase()}`
-  return getLocale(key)
+  const key = `modelCategory${camelCase(categoryKey, { uppercaseFirstWord: true })}`
+  return getLocale(key as any)
 }
 
 function getIntroMessage(model: Mojom.Model) {
-  const key = `introMessage-${model.key}`
-  return getLocale(key)
+  const key = `introMessage${camelCase(model.key, { uppercaseFirstWord: true })}`
+  return getLocale(key as any)
 }
 
 export default function ModelIntro() {

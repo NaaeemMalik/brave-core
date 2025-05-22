@@ -7,7 +7,7 @@ import * as React from 'react'
 import ProgressRing from '@brave/leo/react/progressRing'
 import Icon from '@brave/leo/react/icon'
 import formatMessage from '$web-common/formatMessage'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import * as Mojom from '../../../common/mojom'
 import { useUntrustedConversationContext } from '../../untrusted_conversation_context'
 import MarkdownRenderer from '../markdown_renderer'
@@ -83,11 +83,6 @@ function AssistantEvent(props: {
   if (props.event.searchStatusEvent && props.isEntryInProgress && !props.hasCompletionStarted) {
     return (
       <div className={styles.actionInProgress}><ProgressRing />Improving answer with Brave Search…</div>
-    )
-  }
-  if (props.event.pageContentRefineEvent && props.isEntryInProgress && !props.hasCompletionStarted) {
-    return (
-      <div className={styles.actionInProgress}><ProgressRing />{getLocale('pageContentRefinedInProgress')}</div>
     )
   }
   // TODO(petemill): Consider displaying in-progress queries if the API

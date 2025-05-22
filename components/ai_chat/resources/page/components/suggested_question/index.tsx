@@ -7,7 +7,7 @@ import * as React from 'react'
 import Button from "@brave/leo/react/button";
 import ProgressRing from '@brave/leo/react/progressRing';
 import classnames from '$web-common/classnames';
-import { getLocale } from '$web-common/locale';
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale';
 import * as Mojom from '../../../common/mojom'
 import { useConversation } from "../../state/conversation_context";
 import styles from './style.module.scss'

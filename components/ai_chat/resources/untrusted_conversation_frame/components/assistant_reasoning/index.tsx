@@ -6,7 +6,7 @@
 import * as React from 'react'
 import Icon from '@brave/leo/react/icon'
 import ProgressRing from '@brave/leo/react/progressRing'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import CaretSVG from '../svg/caret'
 import cursorStyles from '../markdown_renderer/style.module.scss'
 import styles from './style.module.scss'

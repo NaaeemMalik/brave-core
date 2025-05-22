@@ -6,7 +6,7 @@
 import * as React from 'react'
 import Alert from '@brave/leo/react/alert'
 import Button from '@brave/leo/react/button'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import { useAIChat } from '../../state/ai_chat_context'
 import styles from './alerts.module.scss'
 
@@ -20,13 +20,13 @@ export default function ErrorInvalidEndpointURL() {
   return (
     <div className={styles.alert}>
       <Alert type='error'>
-        {getLocale('customModelInvalidEndpoint')}
+        {getLocale('customModelEndpointInvalidError')}
         <Button
           slot='actions'
           kind='filled'
           onClick={handleConfigureClick}
         >
-          {getLocale('customModelModifyConfigurationLabel')}
+          {getLocale('modifyConfigurationLabel')}
         </Button>
       </Alert>
     </div>

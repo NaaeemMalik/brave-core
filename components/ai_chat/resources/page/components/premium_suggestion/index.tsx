@@ -9,7 +9,7 @@ import Button from '@brave/leo/react/button'
 import Label from '@brave/leo/react/label'
 import classnames from '$web-common/classnames'
 import formatMessage from '$web-common/formatMessage'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import { useAIChat } from '../../state/ai_chat_context'
 import styles from './style.module.scss'
 
@@ -21,23 +21,23 @@ interface PremiumSuggestionProps {
 
 const featuresList = [
   {
-    title: getLocale('premiumFeature_1'),
-    desc: getLocale('premiumFeature_1_desc'),
+    title: getLocale('premiumFeature1'),
+    desc: getLocale('premiumFeature1Desc'),
     icon: 'widget-generic'
   },
   {
-    title: getLocale('premiumFeature_2'),
-    desc: getLocale('premiumFeature_2_desc'),
+    title: getLocale('premiumFeature2'),
+    desc: getLocale('premiumFeature2Desc'),
     icon: 'idea'
   },
   {
-    title: getLocale('premiumFeature_3'),
-    desc: getLocale('premiumFeature_3_desc'),
+    title: getLocale('premiumFeature3'),
+    desc: getLocale('premiumFeature3Desc'),
     icon: 'edit-pencil'
   },
   {
-    title: getLocale('premiumFeature_4'),
-    desc: getLocale('premiumFeature_4_desc'),
+    title: getLocale('premiumFeature4'),
+    desc: getLocale('premiumFeature4Desc'),
     icon: 'message-bubble-comments'
   }
 ]

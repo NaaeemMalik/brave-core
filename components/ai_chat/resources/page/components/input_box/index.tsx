@@ -7,7 +7,7 @@ import Icon from '@brave/leo/react/icon'
 import Button from '@brave/leo/react/button'
 import * as React from 'react'
 import classnames from '$web-common/classnames'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import ActionTypeLabel from '../../../common/components/action_type_label'
 import { AIChatContext } from '../../state/ai_chat_context'
 import { ConversationContext } from '../../state/conversation_context'
@@ -186,7 +186,7 @@ function InputBox(props: InputBoxProps) {
                 props.context.setIsToolsMenuOpen(!props.context.isToolsMenuOpen)
               }
             }
-            title={getLocale('toolsMenuButtonLabel')}
+            title={getLocale('leoToolsButtonLabel')}
           >
             <Icon
               className={classnames({
@@ -201,7 +201,7 @@ function InputBox(props: InputBoxProps) {
               kind='plain-faint'
               onClick={handleMic}
               disabled={props.context.shouldDisableUserInput}
-              title={getLocale('useMicButtonLabel')}
+              title={getLocale('useMicrophoneButtonLabel')}
             >
               <Icon name='microphone' />
             </Button>

@@ -6,7 +6,7 @@
 import * as React from 'react'
 import Button from '@brave/leo/react/button'
 import Icon from '@brave/leo/react/icon'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import { useAIChat } from '../../state/ai_chat_context'
 import styles from './notices.module.scss'
 import illustrationUrl from './conversation_storage.svg'

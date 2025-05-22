@@ -6,7 +6,7 @@
 import * as React from 'react'
 import Alert from '@brave/leo/react/alert'
 import Button from '@brave/leo/react/button'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import { useAIChat } from '../../state/ai_chat_context'
 import { useConversation } from '../../state/conversation_context'
 import PremiumSuggestion from '../premium_suggestion'
@@ -28,7 +28,7 @@ function ErrorRateLimit(props: Props) {
     return (
       <div className={styles.alert}>
         <Alert type='warning'>
-          {getLocale('errorOAIRateLimit')}
+          {getLocale('errorOaiRateLimit')}
           <Button
             slot='actions'
             kind='filled'

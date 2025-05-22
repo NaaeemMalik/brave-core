@@ -9,7 +9,7 @@ import styles from './style.module.scss'
 import Button from '@brave/leo/react/button'
 import Tooltip from '@brave/leo/react/tooltip'
 import classnames from '$web-common/classnames'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 
 interface Props {
   onClick?: () => void

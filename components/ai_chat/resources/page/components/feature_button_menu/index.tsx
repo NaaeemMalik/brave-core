@@ -9,12 +9,14 @@ import Button from '@brave/leo/react/button'
 import Icon from '@brave/leo/react/icon'
 import Label from '@brave/leo/react/label'
 import classnames from '$web-common/classnames'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import * as Mojom from '../../../common/mojom'
 import { useAIChat } from '../../state/ai_chat_context'
 import { useConversation } from '../../state/conversation_context'
 import styles from './style.module.scss'
 import useIsConversationVisible from '../../hooks/useIsConversationVisible'
+import { camelCase } from '$web-common/camelCase'
+
 export interface Props {
   setIsConversationsListOpen?: (value: boolean) => unknown
 }
@@ -64,7 +66,7 @@ export default function FeatureMenu(props: Props) {
               <div className={styles.menuText}>
                 <div>{model.displayName}</div>
                 <p className={styles.modelSubtitle}>
-                  {getLocale(`braveLeoModelSubtitle-${model.key}`)}
+                  {getLocale(`${camelCase(model.key)}Subtitle` as any)}
                 </p>
               </div>
               {model.options.leoModelOptions?.access ===

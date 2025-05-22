@@ -6,7 +6,7 @@
 import * as React from 'react'
 import Button from '@brave/leo/react/button'
 import Dialog from '@brave/leo/react/dialog'
-import { getLocale, formatLocale } from '$web-common/locale'
+import { getLocale, formatLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import { Url } from 'gen/url/mojom/url.mojom.m.js'
 import { useAIChat } from '../../state/ai_chat_context'
 import { useConversation } from '../../state/conversation_context'

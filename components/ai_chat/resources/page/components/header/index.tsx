@@ -12,7 +12,7 @@ import FeatureButtonMenu, { Props as FeatureButtonMenuProps } from '../feature_b
 import styles from './style.module.scss'
 import { useAIChat, useIsSmall } from '../../state/ai_chat_context'
 import { useConversation, useSupportsAttachments } from '../../state/conversation_context'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import { tabAssociatedChatId, useActiveChat } from '../../state/active_chat_context'
 
 const Logo = ({ isPremium }: { isPremium: boolean }) => <div className={styles.logo}>
@@ -26,9 +26,9 @@ const Logo = ({ isPremium }: { isPremium: boolean }) => <div className={styles.l
 const getTitle = (activeConversation?: Conversation) => activeConversation?.title
   || getLocale('conversationListUntitled')
 
-const newChatButtonLabel = getLocale('newChatButtonLabel')
-const closeButtonLabel = getLocale('closeLabel')
-const openFullPageButtonLabel = getLocale('openFullPageLabel')
+const newChatButtonLabel = getLocale('newConversationButtonLabel')
+const closeButtonLabel = getLocale('labelClose')
+const openFullPageButtonLabel = getLocale('labelOpenFullPage')
 
 export const ConversationHeader = React.forwardRef(function (props: FeatureButtonMenuProps, ref: React.Ref<HTMLDivElement>) {
   const aiChatContext = useAIChat()

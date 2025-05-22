@@ -5,7 +5,7 @@
 
 import * as React from 'react'
 import Button from '@brave/leo/react/button'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import { useConversation } from '../../state/conversation_context'
 import styles from './style.module.scss'
 
@@ -29,13 +29,13 @@ function WelcomeGuide() {
         {conversationContext.associatedContentInfo &&
         conversationContext.shouldSendPageContents ? (
           <>
-            <p>{getLocale('welcomeGuideSiteHelpCardDescWithAction')}</p>
+            <p>{getLocale('welcomeGuideSiteHelpCardWithAction')}</p>
             <div className={styles.actions}>
               <Button
                 kind='outline'
                 onClick={summarizeNow}
               >
-                {getLocale('summarizePageButtonLabel')}
+                {getLocale('summarizeButtonLabel')}
               </Button>
             </div>
           </>
@@ -45,9 +45,9 @@ function WelcomeGuide() {
       </div>
       <div className={`${styles.card} ${styles.chatCard}`}>
         <h4 className={styles.cardTitle}>
-          {getLocale('welcomeGuideShatCardTitle')}
+          {getLocale('welcomeGuideChatCardTitle')}
         </h4>
-        <p>{getLocale('welcomeGuideShatCardDesc')}</p>
+        <p>{getLocale('welcomeGuideChatCardDesc')}</p>
       </div>
     </div>
   )

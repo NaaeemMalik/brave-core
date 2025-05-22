@@ -12,7 +12,7 @@ import Flex from '$web-common/Flex'
 import { useAIChat } from '../../state/ai_chat_context'
 import { TabData } from 'components/ai_chat/resources/common/mojom'
 import { useConversation } from '../../state/conversation_context'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 
 function TabItem({ tab }: { tab: TabData }) {
     const aiChat = useAIChat()
@@ -45,7 +45,7 @@ export default function Attachments() {
             <Flex direction='row' justify='space-between' align='center'>
                 <h5>{getLocale('attachmentsBrowserTabsTitle')}</h5>
             </Flex>
-            <Input placeholder={getLocale('searchTabsPlaceholder')} value={search} onInput={e => setSearch(e.value)}>
+            <Input placeholder={getLocale('attachmentsSearchPlaceholder')} value={search} onInput={e => setSearch(e.value)}>
                 <Icon name='search' slot='icon-after' />
             </Input>
             <div className={styles.tabList}>

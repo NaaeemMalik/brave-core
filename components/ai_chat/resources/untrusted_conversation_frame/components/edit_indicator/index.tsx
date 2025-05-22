@@ -7,7 +7,7 @@ import * as React from 'react'
 
 import { Time } from 'gen/mojo/public/mojom/base/time.mojom.m.js'
 import { mojoTimeToJSDate } from '$web-common/mojomUtils'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import Icon from '@brave/leo/react/icon'
 
 import styles from './style.module.scss'

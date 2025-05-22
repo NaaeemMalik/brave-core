@@ -6,7 +6,7 @@
 import * as React from 'react'
 import Alert from '@brave/leo/react/alert'
 import Button from '@brave/leo/react/button'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import { useAIChat } from '../../state/ai_chat_context'
 import styles from './alerts.module.scss'
 
@@ -24,13 +24,13 @@ export default function ErrorInvalidAPIKey(props: ElementProps) {
   return (
     <div className={styles.alert}>
       <Alert type='warning'>
-        {getLocale('errorInvalidAPIKey')}
+        {getLocale('errorInvalidApiKey')}
         <Button
           slot='actions'
           kind='filled'
           onClick={handleConfigureClick}
         >
-          {getLocale('customModelModifyConfigurationLabel')}
+          {getLocale('modifyConfigurationLabel')}
         </Button>
         <Button
           slot='actions'

@@ -7,7 +7,7 @@ import * as React from 'react'
 import Button from '@brave/leo/react/button'
 import Dialog from '@brave/leo/react/dialog'
 import formatMessage from '$web-common/formatMessage'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import { Url } from 'gen/url/mojom/url.mojom.m.js'
 import { useAIChat } from '../../state/ai_chat_context'
 import styles from './style.module.scss'
@@ -39,7 +39,7 @@ function PrivacyMessage () {
     }
   })
 
-  const aboutDescription3 = formatMessage(getLocale('aboutDescription_3'), {
+  const aboutDescription3 = formatMessage(getLocale('aboutDescription3'), {
     tags: {
       $1: (content) => createLinkWithClickHandler(content, PRIVACY_URL)
     }
@@ -61,7 +61,7 @@ function PrivacyMessage () {
       <div slot="subtitle">{getLocale('privacyTitle')}</div>
       <div className={styles.content}>
         <p>{aboutDescription}</p>
-        <p>{getLocale('aboutDescription_2')}</p>
+        <p>{getLocale('aboutDescription2')}</p>
         <p>{aboutDescription3}</p>
       </div>
       <div slot="actions">

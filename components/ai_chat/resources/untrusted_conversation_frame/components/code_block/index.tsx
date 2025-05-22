@@ -12,7 +12,7 @@ import cpp from 'react-syntax-highlighter/dist/esm/languages/hljs/cpp'
 import javascript from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript'
 import python from 'react-syntax-highlighter/dist/esm/languages/hljs/python'
 import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import styles from './style.module.scss'
 
 SyntaxHighlighter.registerLanguage('cpp', cpp)

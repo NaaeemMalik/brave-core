@@ -6,7 +6,7 @@
 import Button from '@brave/leo/react/button'
 import Icon from '@brave/leo/react/icon'
 import * as React from 'react'
-import { getLocale } from '$web-common/locale'
+import { getLocale } from 'gen/brave/components/ai_chat/core/browser/locale'
 import * as Mojom from '../../mojom'
 import styles from './style.module.scss'
 
@@ -21,68 +21,68 @@ function getCategoryAndItem(actionType: Mojom.ActionType): {
 } {
   switch (actionType) {
       case Mojom.ActionType.SUMMARIZE_SELECTED_TEXT:
-        return { category: undefined, item: getLocale('summarizeLabel')}
+        return { category: undefined, item: getLocale('contextSummarizeText')}
       case Mojom.ActionType.EXPLAIN:
-        return { category: undefined, item: getLocale('explainLabel')}
+        return { category: undefined, item: getLocale('contextExplain')}
       case Mojom.ActionType.CREATE_TAGLINE:
         return {
-          category: getLocale('createCategoryTitle'),
-          item: getLocale('taglineLabel')
+          category: getLocale('contextCreateTagline'),
+          item: getLocale('contextCreateTagline')
         }
       case Mojom.ActionType.CREATE_SOCIAL_MEDIA_COMMENT_SHORT:
         return {
-          category: getLocale('socialMediaPostLabel'),
-          item: getLocale('socialMediaShortLabel')
+          category: getLocale('contextCreateSocialMediaPost'),
+          item: getLocale('contextCreateSocialMediaCommentShort')
         }
       case Mojom.ActionType.CREATE_SOCIAL_MEDIA_COMMENT_LONG:
         return {
-          category: getLocale('socialMediaPostLabel'),
-          item: getLocale('socialMediaLongLabel')
+          category: getLocale('contextCreateSocialMediaPost'),
+          item: getLocale('contextCreateSocialMediaCommentLong')
         }
       case Mojom.ActionType.PARAPHRASE:
         return {
-          category: getLocale('rewriteCategoryTitle'),
-          item: getLocale('paraphraseLabel')
+          category: getLocale('contextRewrite'),
+          item: getLocale('contextParaphrase')
         }
       case Mojom.ActionType.IMPROVE:
         return {
-          category: getLocale('rewriteCategoryTitle'),
-          item: getLocale('improveLabel')
+          category: getLocale('contextRewrite'),
+          item: getLocale('contextImprove')
         }
       case Mojom.ActionType.ACADEMICIZE:
         return {
-          category: getLocale('changeToneLabel'),
-          item: getLocale('academicizeLabel')
+          category: getLocale('contextChangeTone'),
+          item: getLocale('contextAcademicize')
         }
       case Mojom.ActionType.PROFESSIONALIZE:
         return {
-          category: getLocale('changeToneLabel'),
-          item: getLocale('professionalizeLabel')
+          category: getLocale('contextChangeTone'),
+          item: getLocale('contextProfessionalize')
         }
       case Mojom.ActionType.PERSUASIVE_TONE:
         return {
-          category: getLocale('changeToneLabel'),
-          item: getLocale('persuasiveToneLabel')
+          category: getLocale('contextChangeTone'),
+          item: getLocale('contextPersuasiveTone')
         }
       case Mojom.ActionType.CASUALIZE:
         return {
-          category: getLocale('changeToneLabel'),
-          item: getLocale('casualizeLabel')
+          category: getLocale('contextChangeTone'),
+          item: getLocale('contextCasualize')
         }
       case Mojom.ActionType.FUNNY_TONE:
         return {
-          category: getLocale('changeToneLabel'),
-          item: getLocale('funnyToneLabel')
+          category: getLocale('contextChangeTone'),
+          item: getLocale('contextFunnyTone')
         }
       case Mojom.ActionType.SHORTEN:
         return {
-          category: getLocale('changeLengthLabel'),
-          item: getLocale('shortenLabel')
+          category: getLocale('contextChangeLength'),
+          item: getLocale('contextShorten')
         }
       case Mojom.ActionType.EXPAND:
         return {
-          category: getLocale('changeLengthLabel'),
-          item: getLocale('expandLabel')
+          category: getLocale('contextChangeLength'),
+          item: getLocale('contextExpand')
         }
       default:
         return { category: undefined, item: undefined }
