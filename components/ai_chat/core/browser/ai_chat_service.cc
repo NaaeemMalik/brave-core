@@ -378,7 +378,8 @@ void AIChatService::MaybeInitStorage() {
     // Delete all stored data from database
     if (ai_chat_db_) {
       DVLOG(0) << "Unloading AI Chat database due to pref change";
-      base::SequenceBound<AIChatDatabase> ai_chat_db = std::move(ai_chat_db_);
+      base::SequenceBound<std::unique_ptr<AIChatDatabase>> ai_chat_db =
+          std::move(ai_chat_db_);
       ai_chat_db.AsyncCall(&AIChatDatabase::DeleteAllData)
           .Then(base::BindOnce(&AIChatService::OnDataDeletedForDisabledStorage,
                                weak_ptr_factory_.GetWeakPtr()));
@@ -398,12 +399,13 @@ void AIChatService::OnOsCryptAsyncReady(os_crypt_async::Encryptor encryptor,
   if (!profile_prefs_->GetBoolean(prefs::kBraveChatStorageEnabled)) {
     return;
   }
-  ai_chat_db_ = base::SequenceBound<AIChatDatabase>(
+  ai_chat_db_ = base::SequenceBound<std::unique_ptr<AIChatDatabase>>(
       base::ThreadPool::CreateSequencedTaskRunner(
           {base::MayBlock(), base::WithBaseSyncPrimitives(),
            base::TaskPriority::BEST_EFFORT,
            base::TaskShutdownBehavior::BLOCK_SHUTDOWN}),
-      profile_path_.Append(kDBFileName), std::move(encryptor));
+      std::make_unique<AIChatDatabase>(profile_path_.Append(kDBFileName),
+                                       std::move(encryptor)));
 }
 
 void AIChatService::OnDataDeletedForDisabledStorage(bool success) {

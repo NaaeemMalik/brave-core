@@ -151,6 +151,64 @@ class MockConversationHandlerClient : public mojom::ConversationUI {
   mojo::Remote<mojom::ConversationHandler> conversation_handler_remote_;
 };
 
+class MockAIChatDatabase : public AIChatDatabase {
+ public:
+  MockAIChatDatabase()
+      : AIChatDatabase(base::FilePath(),
+                       os_crypt_async::GetTestEncryptorForTesting()) {}
+  ~MockAIChatDatabase() override = default;
+
+  MOCK_METHOD(bool,
+              AddConversation,
+              (mojom::ConversationPtr,
+               std::vector<std::string>,
+               mojom::ConversationTurnPtr),
+              (override));
+
+  MOCK_METHOD(bool,
+              AddConversationEntry,
+              (std::string_view,
+               mojom::ConversationTurnPtr,
+               std::optional<std::string_view>,
+               std::optional<std::string>),
+              (override));
+
+  MOCK_METHOD(bool,
+              AddOrUpdateAssociatedContent,
+              (std::string_view,
+               std::vector<mojom::AssociatedContentPtr>,
+               std::vector<std::string>),
+              (override));
+
+  MOCK_METHOD(bool,
+              UpdateConversationTitle,
+              (std::string_view, std::string_view),
+              (override));
+
+  MOCK_METHOD(bool,
+              UpdateConversationTokenInfo,
+              (std::string_view, uint64_t, uint64_t),
+              (override));
+
+  MOCK_METHOD(bool, DeleteConversationEntry, (std::string_view), (override));
+  MOCK_METHOD(bool, DeleteConversation, (std::string_view), (override));
+  MOCK_METHOD(bool, DeleteAllData, (), (override));
+  MOCK_METHOD(bool,
+              DeleteAssociatedWebContent,
+              (std::optional<base::Time>, std::optional<base::Time>),
+              (override));
+
+  MOCK_METHOD(std::vector<mojom::ConversationPtr>,
+              GetAllConversations,
+              (),
+              (override));
+
+  MOCK_METHOD(mojom::ConversationArchivePtr,
+              GetConversationData,
+              (std::string_view),
+              (override));
+};
+
 }  // namespace
 
 class AIChatServiceUnitTest : public testing::Test,
@@ -1064,6 +1122,69 @@ TEST_P(AIChatServiceUnitTest, GetSuggestedTopics_CacheTopics) {
   TestGetSuggestedTopics(topics1);
   ai_chat_service_->TabDataChanged({});
   TestGetSuggestedTopics(topics2);
+}
+
+TEST_P(AIChatServiceUnitTest, TemporaryConversation_NoDatabaseInteraction) {
+  // We create mock DB object regardless of whether history is enabled.
+  // In real case, there's no DB object at all if history is enabled, this test
+  // is irrelevant when there's no DB object at all.
+  if (!IsAIChatHistoryEnabled()) {
+    return;
+  }
+
+  // Create a mock database
+  auto mock_ptr = std::make_unique<NiceMock<MockAIChatDatabase>>();
+  auto* mock_db_ptr = mock_ptr.get();
+  auto mock_db = base::SequenceBound<std::unique_ptr<AIChatDatabase>>(
+      task_environment_.GetMainThreadTaskRunner(), std::move(mock_ptr));
+
+  // Set up expectations - no database calls should be made
+  EXPECT_CALL(*mock_db_ptr, AddConversation(_, _, _)).Times(0);
+  EXPECT_CALL(*mock_db_ptr, AddConversationEntry(_, _, _, _)).Times(0);
+  EXPECT_CALL(*mock_db_ptr, AddOrUpdateAssociatedContent(_, _, _)).Times(0);
+  EXPECT_CALL(*mock_db_ptr, UpdateConversationTitle(_, _)).Times(0);
+  EXPECT_CALL(*mock_db_ptr, UpdateConversationTokenInfo(_, _, _)).Times(0);
+  EXPECT_CALL(*mock_db_ptr, DeleteConversationEntry(_)).Times(0);
+  EXPECT_CALL(*mock_db_ptr, DeleteConversation(_)).Times(0);
+
+  // Replace the real database with our mock
+  ai_chat_service_->SetDatabaseForTesting(std::move(mock_db));
+
+  // Create a temporary conversation
+  ConversationHandler* conversation = CreateConversation();
+  auto client = CreateConversationClient(conversation);
+
+  conversation->SetTemporary(true);
+  auto uuid = conversation->get_conversation_uuid();
+
+  // This would trigger OnConversationEntryAdded.
+  conversation->SetChatHistoryForTesting(CreateSampleChatHistory(1u));
+
+  // Test title change
+  ai_chat_service_->OnConversationTitleChanged(uuid, "New Title");
+
+  // Test token info change
+  ai_chat_service_->OnConversationTokenInfoChanged(uuid, 100, 50);
+
+  // Test removing a message
+  ai_chat_service_->OnConversationEntryRemoved(conversation, "uuid");
+
+  DisconnectConversationClient(client.get());
+
+  // Verify no database calls were made
+  testing::Mock::VerifyAndClearExpectations(mock_db_ptr);
+
+  // Also do a simple sanity test with permanent conversation (test add only),
+  // just for making sure our mock is working as expected. Permanent
+  // conversation is already tested in other test cases.
+  ConversationHandler* permanent_conversation = CreateConversation();
+  auto client2 = CreateConversationClient(permanent_conversation);
+  ASSERT_FALSE(permanent_conversation->GetIsTemporary());
+  permanent_conversation->SetChatHistoryForTesting(CreateSampleChatHistory(1u));
+  EXPECT_CALL(*mock_db_ptr, AddConversation(_, _, _)).Times(1);
+  EXPECT_CALL(*mock_db_ptr, AddConversationEntry(_, _, _, _)).Times(1);
+  DisconnectConversationClient(client2.get());
+  testing::Mock::VerifyAndClearExpectations(mock_db_ptr);
 }
 
 }  // namespace ai_chat
