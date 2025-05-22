@@ -6,16 +6,16 @@
 #ifndef BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_VIEWS_FRAME_MULTI_CONTENTS_VIEW_H_
 #define BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_VIEWS_FRAME_MULTI_CONTENTS_VIEW_H_
 
-#define UpdateContentsBorder           \
+#define UpdateContentsBorderAndOverlay \
   UnUsed() {}                          \
   friend class BraveMultiContentsView; \
-  virtual void UpdateContentsBorder
+  virtual void UpdateContentsBorderAndOverlay
 
 #define SetActiveIndex virtual SetActiveIndex
 
 #include "src/chrome/browser/ui/views/frame/multi_contents_view.h"  // IWYU pragma: export
 
 #undef SetActiveIndex
-#undef UpdateContentsBorder
+#undef UpdateContentsBorderAndOverlay
 
 #endif  // BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_VIEWS_FRAME_MULTI_CONTENTS_VIEW_H_
