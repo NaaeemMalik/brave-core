@@ -203,7 +203,6 @@ void ChromeBrowserMainParts::PostProfileInit(Profile* profile,
   if (base::FeatureList::IsEnabled(
           preferences::features::kBraveBackgroundVideoPlayback) ||
       profile->GetPrefs()->GetBoolean(kBackgroundVideoPlaybackEnabled)) {
-    content::RenderFrameHost::AllowInjectingJavaScript();
     auto* command_line = base::CommandLine::ForCurrentProcess();
     command_line->AppendSwitch(switches::kDisableBackgroundMediaSuspend);
   }
