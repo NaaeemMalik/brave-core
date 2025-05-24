@@ -10,7 +10,7 @@
 
 #include "chrome/browser/reading_list/android/reading_list_manager.h"
 #include "chrome/common/importer/imported_bookmark_entry.h"
-#include "chrome/common/importer/importer_data_types.h"
+#include "components/user_data_importer/common/importer_data_types.h"
 
 #define SetReadStatus                                                    \
   ImportBookmarks(                                                       \
