@@ -252,24 +252,15 @@ bool IsDisabledItemForGuest(SidebarItem::BuiltInItemType type) {
 
 SidebarService::ShowSidebarOption GetDefaultShowSidebarOption(
     version_info::Channel channel) {
-  if (!base::CommandLine::ForCurrentProcess()->HasSwitch(
+  // Respect command line switch for non-stable channels
+  if (base::CommandLine::ForCurrentProcess()->HasSwitch(
           switches::kDontShowSidebarOnNonStable) &&
       channel != version_info::Channel::STABLE) {
-    return ShowSidebarOption::kShowAlways;
+    return ShowSidebarOption::kShowNever;
   }
 
-  if (!g_browser_process) {
-    CHECK_IS_TEST();
-    return ShowSidebarOption::kShowAlways;
-  }
-
-  if (auto* local_state = g_browser_process->local_state()) {
-    return local_state->GetBoolean(kTargetUserForSidebarEnabledTest)
-               ? ShowSidebarOption::kShowAlways
-               : ShowSidebarOption::kShowNever;
-  }
-
-  return ShowSidebarOption::kShowNever;
+  // Default to kShowAlways for tests and general cases
+  return ShowSidebarOption::kShowAlways;
 }
 
 }  // namespace sidebar

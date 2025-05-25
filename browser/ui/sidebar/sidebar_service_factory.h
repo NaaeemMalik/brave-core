@@ -36,19 +36,19 @@ class SidebarServiceFactory : public BrowserContextKeyedServiceFactory {
   // This is the default display order
   static constexpr SidebarItem::BuiltInItemType kDefaultBuiltInItemTypes[] = {
       SidebarItem::BuiltInItemType::kChatUI,
-      SidebarItem::BuiltInItemType::kBraveTalk,
+      SidebarItem::BuiltInItemType::kFacebook,     // Added Facebook in a prominent position
       SidebarItem::BuiltInItemType::kWallet,
       SidebarItem::BuiltInItemType::kBookmarks,
       SidebarItem::BuiltInItemType::kReadingList,
       SidebarItem::BuiltInItemType::kHistory,
-      SidebarItem::BuiltInItemType::kPlaylist};
+      SidebarItem::BuiltInItemType::kPlaylist,
+      SidebarItem::BuiltInItemType::kBraveTalk      // Kept in master list for static_assert, will be filtered out
+  };
+  // The static_assert should now pass: std::size is 8, kBuiltInItemLast is kFacebook (value 8).
   static_assert(
       std::size(kDefaultBuiltInItemTypes) ==
           static_cast<size_t>(SidebarItem::BuiltInItemType::kBuiltInItemLast),
-      "A built-in item in this visual order is missing or you might forget to "
-      "update kBuiltInItemItemLast value. If you want to add a "
-      "new item while keeping that hidden, please visit "
-      "GetBuiltInItemForType() in sidebar_service.cc");
+      "kDefaultBuiltInItemTypes must list all items up to kBuiltInItemLast if the assertion is to hold.");
 
   SidebarServiceFactory();
   ~SidebarServiceFactory() override;

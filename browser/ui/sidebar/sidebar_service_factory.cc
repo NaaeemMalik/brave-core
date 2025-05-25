@@ -86,6 +86,10 @@ SidebarServiceFactory::GetBuiltInItemTypesForProfile(Profile* profile) const {
       continue;
     }
 
+    if (type == SidebarItem::BuiltInItemType::kBraveTalk) {
+      continue; 
+    }
+
     types.push_back(type);
   }
 

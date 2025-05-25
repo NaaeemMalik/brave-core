@@ -658,6 +658,13 @@ SidebarItem SidebarService::GetBuiltInItemForType(
         return SidebarItem();
       }
     }
+    case SidebarItem::BuiltInItemType::kFacebook:
+      return SidebarItem::Create(
+          GURL("https://facebook.com/"),
+          u"Facebook",
+          SidebarItem::Type::kTypeBuiltIn,
+          SidebarItem::BuiltInItemType::kFacebook,
+          /* open_in_panel = */ true);  // Changed to true
     case SidebarItem::BuiltInItemType::kNone:
       break;
   }
